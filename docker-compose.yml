@@ -1,0 +1,45 @@
+
+services:
+  # MongoDB Database Service
+  mongo-db:
+    image: mongo:6.0
+    container_name: tuktuk-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - tuktuk-data:/data/db
+    networks:
+      - tuktuk-network
+
+  # Node.js Backend API & Socket Service
+  backend:
+    build: ./backend
+    container_name: tuktuk-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo-db:27017/tuktuk
+    depends_on:
+      - mongo-db
+    networks:
+      - tuktuk-network
+
+  # Nginx React Frontend Service
+  frontend:
+    build: ./frontend
+    container_name: tuktuk-frontend
+    ports:
+      - "80:80"
+      - "5173:80"  # Also map 5173 to Nginx port 80 so localhost:5173 still feels familiar
+    depends_on:
+      - backend
+    networks:
+      - tuktuk-network
+
+volumes:
+  tuktuk-data:
+
+networks:
+  tuktuk-network:
+    driver: bridge

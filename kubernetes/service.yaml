@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tuktuk-backend-service
+spec:
+  selector:
+    app: tuktuk-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tuktuk-frontend-service
+spec:
+  selector:
+    app: tuktuk-frontend
+  ports:
+    - protocol: TCP
+      port: 80       # Port exposed internally
+      targetPort: 80 # Nginx port
+      nodePort: 30080 # Port exposed on localhost globally via Kubernetes
+  type: NodePort

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tuktuk-backend-deployment
+  labels:
+    app: tuktuk-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tuktuk-backend
+  template:
+    metadata:
+      labels:
+        app: tuktuk-backend
+    spec:
+      containers:
+      - name: tuktuk-backend
+        image: tuktuk-app-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017/tuktuk"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tuktuk-backend-service
+spec:
+  selector:
+    app: tuktuk-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort

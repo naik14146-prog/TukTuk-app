@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tuktuk-frontend-deployment
+  labels:
+    app: tuktuk-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tuktuk-frontend
+  template:
+    metadata:
+      labels:
+        app: tuktuk-frontend
+    spec:
+      containers:
+      - name: tuktuk-frontend
+        image: tuktuk-app-frontend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tuktuk-frontend-service
+spec:
+  selector:
+    app: tuktuk-frontend
+  ports:
+    - protocol: TCP
+      port: 80       # Port exposed internally
+      targetPort: 80 # Nginx port
+      nodePort: 30080 # Port exposed on localhost globally via Kubernetes
+  type: NodePort

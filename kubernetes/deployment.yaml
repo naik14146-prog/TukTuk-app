@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:6.0
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tuktuk-backend-deployment
+  labels:
+    app: tuktuk-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tuktuk-backend
+  template:
+    metadata:
+      labels:
+        app: tuktuk-backend
+    spec:
+      containers:
+      - name: tuktuk-backend
+        image: tuktuk-app-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo-service:27017/tuktuk"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tuktuk-frontend-deployment
+  labels:
+    app: tuktuk-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tuktuk-frontend
+  template:
+    metadata:
+      labels:
+        app: tuktuk-frontend
+    spec:
+      containers:
+      - name: tuktuk-frontend
+        image: tuktuk-app-frontend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80

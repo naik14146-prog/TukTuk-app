@@ -1,0 +1,426 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mode-toggle {
+  display: flex;
+  background: rgba(0,0,0,0.6);
+  border-radius: 999px;
+  padding: 0.25rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.mode-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.mode-btn.active {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 15px rgba(255,183,3,0.4);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  margin-top: 70px; /* Offset for navbar */
+  position: relative;
+  z-index: 10;
+  pointer-events: none; /* Let users drag the map behind it */
+}
+
+/* Premium Background Styles */
+.premium-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top left, #121212, #0a0a0a);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.bg-shape {
+  position: absolute;
+  filter: blur(100px);
+  opacity: 0.45;
+  border-radius: 50%;
+  animation: moveShape 25s infinite alternate ease-in-out;
+}
+
+.shape-1 {
+  width: 500px; height: 500px;
+  background: var(--primary);
+  top: -150px; right: -100px;
+  animation-duration: 25s;
+}
+
+.shape-2 {
+  width: 400px; height: 400px;
+  background: #ef4444; /* Accentuating color */
+  bottom: -100px; left: -100px;
+  animation-delay: -5s;
+  animation-duration: 30s;
+}
+
+.shape-3 {
+  width: 300px; height: 300px;
+  background: var(--primary-dark);
+  top: 40%; left: 30%;
+  animation-delay: -10s;
+  animation-duration: 20s;
+}
+
+@keyframes moveShape {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(100px, 100px) scale(1.2); }
+}
+
+.leaflet-container {
+  display: none; /* Map hidden but code kept for reference */
+}
+
+/* Passenger View */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+  width: 100%;
+  max-width: 450px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  position: relative;
+  pointer-events: auto; /* Re-enable pointer events for the panel */
+}
+
+.panel-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Offer Banner */
+.offer-banner {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px dashed rgba(16, 185, 129, 0.5);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.offer-icon {
+  background: var(--success);
+  color: #fff;
+  padding: 0.4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.offer-text {
+  flex: 1;
+}
+
+.offer-text h4 {
+  color: var(--success);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.offer-text p {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Input Fields */
+.routing-inputs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.route-line {
+  position: absolute;
+  left: 21px; 
+  top: 28px; 
+  bottom: 28px;
+  width: 2px;
+  background: rgba(255,255,255,0.1);
+  z-index: 1;
+}
+
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0,0,0,0.5);
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: border-color 0.2s;
+  z-index: 2;
+}
+
+.input-field:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255,183,3,0.1);
+}
+
+.input-field input {
+  flex: 1;
+  font-size: 1rem;
+}
+
+/* Vehicle Options */
+.vehicle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vehicle-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(0,0,0,0.4);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vehicle-card:hover {
+  background: rgba(0,0,0,0.6);
+}
+
+.vehicle-card.selected {
+  border-color: var(--primary);
+  background: rgba(255, 183, 3, 0.05);
+  box-shadow: 0 4px 20px rgba(255, 183, 3, 0.1);
+}
+
+.vehicle-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.vehicle-icon {
+  font-size: 2rem;
+  background: rgba(255,255,255,0.05);
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
+.vehicle-card.selected .vehicle-icon {
+  background: var(--primary);
+  color: #000;
+}
+
+.vehicle-details h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.vehicle-details p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.vehicle-price {
+  text-align: right;
+}
+
+.price-original {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  margin-bottom: 0.2rem;
+}
+
+.price-discounted {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Button */
+.primary-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(255,183,3,0.3);
+  margin-top: 0.5rem;
+}
+
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,183,3,0.4);
+}
+
+.primary-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Driver View */
+.ride-requests {
+  width: 100%;
+  max-width: 500px;
+  pointer-events: auto;
+}
+
+.request-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--glass-shadow);
+}
+
+.request-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.vehicle-tag {
+  background: var(--primary);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.accept-btn {
+  width: 100%;
+  background: var(--success);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.accept-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading animations */
+.searching-state, .accepted-state {
+  text-align: center;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pulse-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 183, 3, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.4); }
+  70% { box-shadow: 0 0 0 30px rgba(255, 183, 3, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.1);
+}
